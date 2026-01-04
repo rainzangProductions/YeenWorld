@@ -36,7 +36,7 @@ public class GrenadeExplode : MonoBehaviour
             if (near.gameObject.tag != "Enemy Projectile" && near.gameObject.tag != "Player Projectile")
             {
                 Rigidbody rb = near.GetComponent<Rigidbody>();
-                rb.AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
+                if(rb != null) rb.AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
             }
             //DEAL DAMAGE TO ENEMIES
             EnemyAI enemy = near.GetComponent<EnemyAI>();
