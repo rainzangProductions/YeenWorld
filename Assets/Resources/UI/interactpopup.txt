@@ -1,0 +1,14 @@
+﻿EN,Interact
+DE,Interagieren
+FR,Interagir
+ZH,相互影响
+JA,相互作用
+KR,상호 작용하다
+EL,αλληλεπιδρώ
+IT,Interagire
+SV,Påverka Varandra
+ES,Interactuar
+DA,Interagere
+NL,Interactie
+FI,Käytä
+RU,взаимодействовать

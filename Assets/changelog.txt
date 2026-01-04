@@ -1,0 +1,31 @@
+1-2 January 2026
+- By 3am on the 2nd: Disabled gravity for the jelk projectile and added detection for physical impacts.
+All projectiles, if they explode, now explode upon impact instead of just waiting for the delay to run out.
+This also includes adding explosion impacts to any rigidbodies EXCLUDING other projectiles
+- Increased sight range and attack range of my test enemies so the player has more time to react
+to oncoming projectiles
+
+31 December 2025
+- Edited the code so that enemy projectiles (at least grenades) are actually pointed forward
+
+19 December 2025 2:45am
+- Created the PlayerHealth script
+- Created the different attack types as an enum in EnemyAI (instead of memorizing a list of attack types and assigning them a number)
+- When an enemy creates a projectile, it sets the ""enemyOwner" of the grenadeExplosion script to itself, so the player knows "alright this splash damage?
+was created by this projectile which was created by this enemy which does XYZ damage, so I will now take XYZ damage"
+
+4 November 2025 11pm - 5 November 1am
+- Finished the MasterUITextAssetGetter script. It reads from files that have the translations for the UI in a singular text file :)
+- Lowered the pixel per resolution of the dialogue box and the buttons for "save" and "quit" to make them rounded at the edges
+
+November 4 2025 2am
+- Used ChatGPT to come up with a script that separates on the same line in TextAssets using the comma "," so I could make one text file per UI element and have it be in
+multiple languages. IE "EN,Interact" and then "DE,Sprechen" on another line. Copied and pasted from chatgpt and it worked like a charm yippee
+- Changed the opacity of the E2Interact textbox from 22 to 130
+- Fixed the spacing of the textbox to accomodate for the word "Interagieren"
+- Moved the textbox panel slightly lower and made it less tall
+- Started creation of MasterUITextAssetGetter
+
+October 31 2025
+- Dialogue can now be parsed through text files. Kept in subfolders designated for the game's respective language enabling the game to be translated/localized
+- The player is opaque when moving around so the player can see who they're looking/shooting. Goes fully colored when idling.

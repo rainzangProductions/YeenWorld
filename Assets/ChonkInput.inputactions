@@ -1,0 +1,33 @@
+{
+    "name": "ChonkInput",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "3b3c8126-c74a-4f0e-ac3c-cb69f90e4fb8",
+            "actions": [
+                {
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "8b9ddf4d-31e5-4fbe-9e28-bba8ec04cb3f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "69acbdd5-0b2a-4fc9-af81-0a2b6a5ad28a",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

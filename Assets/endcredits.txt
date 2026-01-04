@@ -1,0 +1,23 @@
+YEEN WORLD
+You've reached the end of the tech demo!
+
+LEAD GAME DESIGN
+Programming: RainZang
+Art: RainZang
+Level Design: RainZang
+Level Modelling: RainZang
+Music: RainZang
+SFX: RainZang / Sounds from the internet
+Assets: Various people from the Unity Asset Store
+Storyline: RainZang, Dr. DirtNaps
+
+LOCALIZATION
+English: RainZang
+German: RainZang
+Finnish: Rarru
+Spanish: SenseiFenruu
+
+SPECIAL THANKS/MORAL SUPPORT
+RainZang's Aunt
+TheBagg
+Rarru
