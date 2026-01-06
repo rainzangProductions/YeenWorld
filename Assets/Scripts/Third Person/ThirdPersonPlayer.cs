@@ -11,12 +11,13 @@ public class ThirdPersonPlayer : MonoBehaviour
     //public Transform orientation;
     public float groundDrag;
     public float turnSpeed = 10f;
+    public bool allowStrafe;
 
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    public bool readyToJump;
+    bool readyToJump;
 
     [Header("Crouching")]
     public bool isCrouching;
@@ -66,7 +67,7 @@ public class ThirdPersonPlayer : MonoBehaviour
         MovePlayer();
         Turn();
     }
-    void Turn()
+   void Turn()
     {
         //turn more slowly when airborne
         if(!readyToJump || !grounded)
@@ -79,7 +80,6 @@ public class ThirdPersonPlayer : MonoBehaviour
             transform.Rotate(0, yaw, 0);
         }
     }
-
     void MyInput()
     {
         horInput = Input.GetAxisRaw("Horizontal");
@@ -89,35 +89,58 @@ public class ThirdPersonPlayer : MonoBehaviour
         {
             readyToJump = false;
             Jump();
-            Debug.Log("jumped");
+            //Debug.Log("jumped");
             Invoke(nameof(ResetJump), jumpCooldown);
         }
         if (Input.GetButtonDown("Crouch"))
         {
             isCrouching = !isCrouching;
             Crouch();
-            Debug.Log("crouch button pressed");
+            //Debug.Log("crouch button pressed");
         }
     }
 
-    void MovePlayer()
+    /*void MovePlayer()
     {
-        moveDirection = gameObject.transform.forward * vertInput + gameObject.transform.right * horInput;
+        //put the ability to strafe or not AS A MAIN MENU OPTION
+        if (!allowStrafe)
+        {
+            moveDirection = transform.forward * vertInput;
+        }
+        else
+        {
+            moveDirection = transform.forward * vertInput +
+                            transform.right * horInput * 0.1f;
+        }
+
+        float speed = isCrouching ? crouchSpeed : moveSpeed;
 
         if (grounded)
-            if (isCrouching)
-            {
-                rb.AddForce(moveDirection.normalized * crouchSpeed * 10f, ForceMode.Force);
-            }
-            else
-            {
-                rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-            }
+            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+        else
+            rb.AddForce(moveDirection.normalized * speed * 10f * airMultiplier, ForceMode.Force);
+    }*/
+    void MovePlayer()
+    {
+        float speed = isCrouching ? crouchSpeed : moveSpeed;
+        float horizontalScale = turnSpeed/moveSpeed; // adjust strafing speed here
 
+        if (!allowStrafe)
+        {
+            moveDirection = transform.forward * vertInput;
+        }
+        else
+        {
+            moveDirection = transform.forward * vertInput +
+                            transform.right * horInput * horizontalScale;
+        }
 
-        if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        if (grounded)
+            rb.AddForce(moveDirection * speed * 10f, ForceMode.Force);
+        else
+            rb.AddForce(moveDirection * speed * 10f * airMultiplier, ForceMode.Force);
     }
+
     void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -143,15 +166,15 @@ public class ThirdPersonPlayer : MonoBehaviour
     {
         if (isCrouching)
         {
-            cc.height = originalHeight / 2f;
-            bodyGFX.localScale = new Vector3(1, 0.5f, 1);
-            Debug.Log("crouched");
+            cc.height = originalHeight * 0.65f;
+            bodyGFX.localScale = new Vector3(1, 0.65f, 1);
+            //Debug.Log("crouched");
         }
         else
         {
             cc.height = originalHeight;
-            bodyGFX.localScale = new Vector3(1, 1, 1);
-            Debug.Log("uncrouched");
+            bodyGFX.localScale = Vector3.one;
+            //Debug.Log("uncrouched");
         }
     }
 }
