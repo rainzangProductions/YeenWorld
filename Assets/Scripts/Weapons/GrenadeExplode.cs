@@ -25,18 +25,18 @@ public class GrenadeExplode : MonoBehaviour
         Invoke("DamageCalculation", delay);
     }
 
-    //this happens anyways assuming the projectile will explode midair
+    //DAMAGE CALCULATION HAPPENS WHEN THE PROJECTILE EXPLODES AFTER ITS DELAY
     void DamageCalculation()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange);
 
-        foreach(Collider near in colliders)
+        foreach (Collider near in colliders)
         {
             //appplying physics to anything but other projectiles
             if (near.gameObject.tag != "Enemy Projectile" && near.gameObject.tag != "Player Projectile")
             {
                 Rigidbody rb = near.GetComponent<Rigidbody>();
-                if(rb != null) rb.AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
+                if (rb != null) rb.AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
             }
             //DEAL DAMAGE TO ENEMIES
             EnemyAI enemy = near.GetComponent<EnemyAI>();
@@ -54,7 +54,7 @@ public class GrenadeExplode : MonoBehaviour
         }
         Explode();
     }
-    void Explode ()
+    void Explode()
     {
         AudioSource.PlayClipAtPoint(explosionSound, transform.position);
         Instantiate(explosionEffect, transform.position, transform.rotation);
@@ -69,7 +69,7 @@ public class GrenadeExplode : MonoBehaviour
     //when the projectile hits literally anything
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             PlayerHealth player = other.gameObject.GetComponent<PlayerHealth>();
             if (player != null && gameObject.tag == "Enemy Projectile" && enemyOwner != null)
@@ -77,11 +77,16 @@ public class GrenadeExplode : MonoBehaviour
                 player.TakeDamage(enemyOwner.damage);
                 Explode();
             }
+            return;
         }
-        if(other.gameObject.GetComponent<Rigidbody>() != null) {
-            other.gameObject.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
+        if (other.TryGetComponent(out Rigidbody rb))
+        {
+            rb.GetComponent<Rigidbody>().AddExplosionForce(explosionForce, transform.position, explosionRange, 1f, ForceMode.Impulse);
+            //Explode();
+        }
+        if (other.gameObject.name != "ID76" && !other.gameObject.CompareTag("RegularMob"))
+        {
             Explode();
         }
     }
 }
-    

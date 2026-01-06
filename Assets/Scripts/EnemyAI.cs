@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.HID;
 
 //Dave's Tutorial: https://youtu.be/UjkSFoLxesw
 public class EnemyAI : MonoBehaviour
@@ -12,7 +13,7 @@ public class EnemyAI : MonoBehaviour
     public int health;
     public AudioClip[] deathSounds;
 
-    public enum AttackType { Hitscan, Splash, Melee }
+    public enum AttackType { Ranged, Splash, Melee }
     public AttackType attackType;
     public int damage;
 
@@ -39,7 +40,7 @@ public class EnemyAI : MonoBehaviour
     bool alreadyAttacked;
 
     public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    bool playerInSightRange, playerInAttackRange;
 
     void Awake()
     {
@@ -63,7 +64,23 @@ public class EnemyAI : MonoBehaviour
 
         if (!playerInSightRange && !playerInAttackRange) Patrol();
         if (playerInSightRange && !playerInAttackRange) Chase();
-        if (playerInSightRange && playerInAttackRange) Attack();
+        //if (playerInSightRange && playerInAttackRange) Attack();
+        if (playerInSightRange && playerInAttackRange)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward,
+                out hit, sightRange))
+            {
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    Attack();
+                }
+            }
+            else
+            {
+                Chase();
+            }
+        }
     }
 
     void Patrol()
@@ -100,7 +117,7 @@ public class EnemyAI : MonoBehaviour
         transform.LookAt(player);
 
         if(!alreadyAttacked) { 
-            if(attackType == AttackType.Hitscan)
+            if(attackType == AttackType.Ranged)
             {
 
             }
@@ -146,7 +163,7 @@ public class EnemyAI : MonoBehaviour
 
     void Die()
     {
-        HordeBattle bb = GameObject.FindObjectOfType<HordeBattle>();
+        //HordeBattle bb = GameObject.FindObjectOfType<HordeBattle>();
         //if(bb.inBattle) { bb.mobList.RemoveAt(0); }
 
         Destroy(gameObject);
