@@ -21,6 +21,9 @@ public class ChonkCamera : MonoBehaviour
 
     #endregion
 
+
+    [SerializeField] private LayerMask cameraCollisionMask;
+    [SerializeField] private float cameraRadius = 0.3f;
     void Awake() => _distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
     void Start()
@@ -46,10 +49,23 @@ public class ChonkCamera : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    /*void LateUpdate()
     {
         transform.eulerAngles = new Vector3(_cameraRotation.Pitch, _cameraRotation.Yaw, 0.0f);
         transform.position = target.position - transform.forward * _distanceToPlayer;
+    }*/
+    void LateUpdate() {
+        Quaternion rotation = Quaternion.Euler(_cameraRotation.Pitch, _cameraRotation.Yaw, 0f);
+        Vector3 desiredPosition = target.position - rotation * Vector3.forward * _distanceToPlayer;
+
+        if (Physics.SphereCast(target.position, cameraRadius, desiredPosition - target.position,
+            out RaycastHit hit, _distanceToPlayer, cameraCollisionMask)) {
+            transform.position = hit.point + hit.normal * cameraRadius;
+        } else {
+            transform.position = desiredPosition;
+        }
+
+        transform.rotation = rotation;
     }
 
     private static int BoolToInt(bool b) => b ? 1 : -1;

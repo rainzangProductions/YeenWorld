@@ -42,10 +42,12 @@ public class EnemyAI : MonoBehaviour
     public float sightRange, attackRange;
     bool playerInSightRange, playerInAttackRange;
 
+    SoundMaster mixer;
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        mixer = FindAnyObjectByType<SoundMaster>();
     }
 
     void Update()
@@ -155,7 +157,7 @@ public class EnemyAI : MonoBehaviour
         if(health <= 0 )
         {
             int death = Random.Range(0, deathSounds.Length);
-            AudioSource.PlayClipAtPoint(deathSounds[death], transform.position);
+            mixer.PlaySFXAtPosition(deathSounds[death], transform.position);
             //Invoke(nameof(Die), 0.25f);
             Die();
         }

@@ -1,0 +1,3 @@
+EN,Options
+DE,Optionen
+FI,Tallenna

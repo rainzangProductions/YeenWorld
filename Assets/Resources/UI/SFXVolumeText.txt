@@ -1,0 +1,3 @@
+EN,SFX
+DE,Spezialeffekte
+FI,Tallenna

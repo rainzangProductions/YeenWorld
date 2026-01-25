@@ -32,7 +32,7 @@ public class ThirdPersonPlayer : MonoBehaviour
     float horInput;
     float vertInput;
 
-    Vector3 moveDirection;
+    public Vector3 moveDirection;
     Rigidbody rb;
     CapsuleCollider cc;
 
@@ -48,6 +48,7 @@ public class ThirdPersonPlayer : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return;
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
         SpeedControl();
@@ -64,8 +65,9 @@ public class ThirdPersonPlayer : MonoBehaviour
 
     void FixedUpdate()
     {
-        MovePlayer();
-        Turn();
+        if (Time.timeScale == 0f) return;
+        MovePlayerNoRotation();
+        //Turn();
     }
    void Turn()
     {
@@ -99,28 +101,7 @@ public class ThirdPersonPlayer : MonoBehaviour
             //Debug.Log("crouch button pressed");
         }
     }
-
-    /*void MovePlayer()
-    {
-        //put the ability to strafe or not AS A MAIN MENU OPTION
-        if (!allowStrafe)
-        {
-            moveDirection = transform.forward * vertInput;
-        }
-        else
-        {
-            moveDirection = transform.forward * vertInput +
-                            transform.right * horInput * 0.1f;
-        }
-
-        float speed = isCrouching ? crouchSpeed : moveSpeed;
-
-        if (grounded)
-            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-        else
-            rb.AddForce(moveDirection.normalized * speed * 10f * airMultiplier, ForceMode.Force);
-    }*/
-    void MovePlayer()
+    void MovePlayerRotation()
     {
         float speed = isCrouching ? crouchSpeed : moveSpeed;
         float horizontalScale = turnSpeed/moveSpeed; // adjust strafing speed here
@@ -139,6 +120,36 @@ public class ThirdPersonPlayer : MonoBehaviour
             rb.AddForce(moveDirection * speed * 10f, ForceMode.Force);
         else
             rb.AddForce(moveDirection * speed * 10f * airMultiplier, ForceMode.Force);
+    }
+
+    void MovePlayerNoRotation() {
+        float speed = isCrouching ? crouchSpeed : moveSpeed;
+
+        Vector3 forward = Camera.main.transform.forward;
+        Vector3 right = Camera.main.transform.right;
+
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        moveDirection = forward * vertInput + right * horInput;
+
+        if (grounded)
+            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+        else
+            rb.AddForce(moveDirection.normalized * speed * 10f * airMultiplier, ForceMode.Force);
+
+        // rotate player to face movement direction
+        if (moveDirection.magnitude > 0.1f) {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                turnSpeed * Time.deltaTime
+            );
+        }
     }
 
     void SpeedControl()

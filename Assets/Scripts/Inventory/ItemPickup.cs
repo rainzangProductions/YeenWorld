@@ -8,6 +8,7 @@ public class ItemPickup : MonoBehaviour {
     public Item item;   // Item to put in the inventory on pickup
     public AudioClip pickupSound;
     public float audioVolume = 1f;
+    SoundMaster mixer;
 
     // When the player interacts with the item
     public void Interact()
@@ -18,15 +19,15 @@ public class ItemPickup : MonoBehaviour {
     // Pick up the item
     void PickUp()
     {
+        mixer = FindAnyObjectByType<SoundMaster>();
         Debug.Log("Picking up " + item.name);
         bool wasPickedUp = Inventory.instance.Add(item);    // Add to inventory
 
         // If successfully picked up
         if (wasPickedUp)
         {
-            AudioSource.PlayClipAtPoint(pickupSound, transform.position, audioVolume);
+            mixer.PlaySFXAtPosition(pickupSound, transform.position);
             Destroy(gameObject);    // Destroy item from scene
         }
     }
-    
 }

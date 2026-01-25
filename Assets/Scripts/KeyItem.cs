@@ -9,6 +9,7 @@ public class KeyItem : MonoBehaviour
     public GameObject dialogueBox;
     public AudioClip pickupSound;
     public float audioVolume = 0.2f;
+    public bool keyItemGet;
 
     int UIPosition;
     string[] lines;
@@ -108,6 +109,7 @@ public class KeyItem : MonoBehaviour
     // Update is called once per frame
     IEnumerator KeyItemStuff()
     {
+        keyItemGet = true;
         dialogueBox.gameObject.SetActive(true);
         dialogueBox.GetComponentInChildren<TextMeshProUGUI>().text = translatedWord1;
         AudioSource.PlayClipAtPoint(pickupSound, transform.position, audioVolume);
@@ -120,6 +122,7 @@ public class KeyItem : MonoBehaviour
 
         dialogueBox.gameObject.SetActive(false);
         Time.timeScale = 1;
+        keyItemGet = false;
         Destroy(gameObject);
     }
 }

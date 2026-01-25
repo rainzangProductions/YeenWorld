@@ -1,0 +1,3 @@
+EN,Save
+DE,Speichern
+FI,Tallenna

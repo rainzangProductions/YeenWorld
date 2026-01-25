@@ -3,7 +3,10 @@ guid: 6eb1a1e4e2c6ff6469b63316244e5a35
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - thisWeapon: {fileID: 11400000, guid: 3cc231c28dcd01b4c9326e4d1c6e4b35, type: 2}
+  - spawnPoint: {instanceID: 0}
+  - grenadePrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

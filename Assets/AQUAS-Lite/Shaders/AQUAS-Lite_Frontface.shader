@@ -40,8 +40,11 @@ Shader "AQUAS-Lite/Frontface"
 	SubShader
 	{
 		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" }
+		//Tags { "RenderType" = "Opaque" "Queue" = "Geometry" "IgnoreProjector" = "True" }
 		Cull Back
 		GrabPass{ }
+		//ZWrite On
+		//ZTest LEqual
 		CGPROGRAM
 		#include "UnityPBSLighting.cginc"
 		#include "UnityShaderVariables.cginc"

@@ -13,6 +13,7 @@ public class GrenadeExplode : MonoBehaviour
     public AudioClip explosionSound;
     GameObject playerGrenadeLauncher;
     public EnemyAI enemyOwner;
+    SoundMaster mixer;
 
     public enum ExplosionType { Grenade, Jelk }
 
@@ -21,6 +22,7 @@ public class GrenadeExplode : MonoBehaviour
     void Start()
     {
         //rig = GetComponent<Rigidbody>();
+        mixer = FindAnyObjectByType<SoundMaster>();
         playerGrenadeLauncher = GameObject.Find("GrenadeLauncherGun(Clone)");
         Invoke("DamageCalculation", delay);
     }
@@ -56,7 +58,7 @@ public class GrenadeExplode : MonoBehaviour
     }
     void Explode()
     {
-        AudioSource.PlayClipAtPoint(explosionSound, transform.position);
+        mixer.PlaySFXAtPosition(explosionSound, transform.position); 
         Instantiate(explosionEffect, transform.position, transform.rotation);
         Destroy(gameObject);
     }
