@@ -6,14 +6,16 @@ public class LaseriteCannon : MonoBehaviour
 {
     //Camera fpsCam;
     public GunItem thisWeapon;
-    //int range;
-    //int damage;
+    public GameObject bulletHole;
+    public float bulletHoleDuration;
     InventoryUI inventory;
+    SoundMaster mixer;
 
     void Start()
     {
         //fpsCam = Camera.main;
         inventory = FindObjectOfType<InventoryUI>();
+        mixer = FindObjectOfType<SoundMaster>();
     }
 
     void Update()
@@ -49,5 +51,15 @@ public class LaseriteCannon : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * thisWeapon.impactForce);
             }
         }
+        AudioClip gunSound = thisWeapon.useSound;
+        if(gunSound != null) mixer.PlaySFXAtPosition(gunSound, transform.position);
+        BulletHoleImpact(hit);
+    }
+
+    void BulletHoleImpact(RaycastHit hit) {
+        GameObject impact = Instantiate(bulletHole, hit.point, Quaternion.LookRotation(hit.normal));
+        Vector3 forward = impact.transform.forward;
+        impact.transform.Translate(forward * 0.1f, Space.World);
+        Destroy(impact, bulletHoleDuration);
     }
 }
