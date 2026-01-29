@@ -1,3 +1,6 @@
+After 3 January 2026:
+REFER TO GITHUB
+
 1-2 January 2026
 - By 3am on the 2nd: Disabled gravity for the jelk projectile and added detection for physical impacts.
 All projectiles, if they explode, now explode upon impact instead of just waiting for the delay to run out.

@@ -26,7 +26,7 @@ World Map Music File Select - SMG1 (3rd preset + 50% slowed)
 https://www.youtube.com/watch?v=UvWRz58K8ek&list=PLoqOgJJaN57YiiY-JrdSvBVCprMPednXl&index=3
 
 Weapon Switch and Ice Crackle sound (distortion + RIAA)
-https://www.youtube.com/watch?v=Mfxv6EXbJIM&pp=ygUWZ21vZCBpdGVtIHBpY2t1cCBzb3VuZA%3D%3D
+https://www.youtube.com/watch?v=Mfxv6EXbJIM&pp=ygUWZ21vZCBpdGVtIHBpY2t1cCBzb3VuZA%3D%3D (0:19)
 
 Record Player (VIS Games)
 https://assetstore.unity.com/packages/3d/props/interior/record-player-4249
@@ -47,8 +47,11 @@ https://assetstore.unity.com/packages/3d/props/bridges-pack-212950
 
 Aquas Lite (Dogmatic):
 https://assetstore.unity.com/packages/vfx/shaders/aquas-lite-built-in-render-pipeline-53519
-Tutorial:
-https://www.youtube.com/watch?v=pOo48Vdtwwk
+Tutorial: https://www.youtube.com/watch?v=pOo48Vdtwwk
 
 Tire Smoke/Jelk/Cartoon Explosion:
 Tire Smoke from the Prometheus Car Pack
+https://assetstore.unity.com/packages/tools/physics/prometeo-car-controller-209444
+
+Laserite/Jelk Cannon Splotch Image:
+https://static.vecteezy.com/system/resources/thumbnails/029/341/677/small/orange-ink-splashes-png.png

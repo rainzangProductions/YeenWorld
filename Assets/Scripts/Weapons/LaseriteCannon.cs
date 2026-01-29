@@ -1,13 +1,21 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class LaseriteCannon : MonoBehaviour
 {
     //Camera fpsCam;
+
+    //layermask tutorial by: https://youtu.be/AECUU7BlRU4
+    //int layerMask = 1 << 9;
+    //layerMask =~ layerMask;
+    //nametolayer layermask tutorial by: https://discussions.unity.com/t/how-to-ray-cast-through-objects/592754/3
+    
     public GunItem thisWeapon;
     public GameObject bulletHole;
     public float bulletHoleDuration;
+
     InventoryUI inventory;
     SoundMaster mixer;
 
@@ -20,46 +28,60 @@ public class LaseriteCannon : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && !inventory.inventoryUI.activeSelf)
-        {
-            Shoot();
-        }
+        if (Input.GetButtonDown("Fire1") && !inventory.inventoryUI.activeSelf) Shoot();
     }
 
     void Shoot()
     {
-        //layermask tutorial by: https://youtu.be/AECUU7BlRU4
-        //int layerMask = 1 << 9;
-        //layerMask =~ layerMask;
-        //nametolayer layermask tutorial by: https://discussions.unity.com/t/how-to-ray-cast-through-objects/592754/3
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, thisWeapon.range, ~(1 << LayerMask.NameToLayer("whatIsPlayer"))))
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        RaycastHit[] hits = Physics.RaycastAll(ray, thisWeapon.range);
+
+        if (hits.Length == 0)
+            return;
+
+        // Sort hits by distance from camera
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        bool passedPlayer = false;
+
+        foreach (RaycastHit hit in hits)
         {
+            if (!passedPlayer)
+            {
+                if (hit.transform.CompareTag("Player"))
+                {
+                    passedPlayer = true;
+                }
+                continue;
+            }
+
+            // First thing AFTER the player
             Debug.Log("You shot at " + hit.transform.name);
 
             EnemyAI target = hit.transform.GetComponent<EnemyAI>();
             if (target != null)
-            {
                 target.TakeDamage(thisWeapon.damage);
-                Debug.Log(hit.transform.name + " took " + thisWeapon.damage.ToString() + " damage!");
-            }
-
-            Instantiate(thisWeapon.impactParticle, hit.point, Quaternion.LookRotation(hit.normal));
-
+            //Instantiate(thisWeapon.impactParticle, hit.point, Quaternion.LookRotation(hit.normal));
             if (hit.rigidbody != null)
-            {
                 hit.rigidbody.AddForce(-hit.normal * thisWeapon.impactForce);
-            }
+
+            if (thisWeapon.useSound != null)
+                mixer.PlaySFXAtPosition(thisWeapon.useSound, transform.position);
+
+            BulletHoleImpact(hit);
+            break;
         }
-        AudioClip gunSound = thisWeapon.useSound;
-        if(gunSound != null) mixer.PlaySFXAtPosition(gunSound, transform.position);
-        BulletHoleImpact(hit);
     }
 
+
+
     void BulletHoleImpact(RaycastHit hit) {
+        Instantiate(thisWeapon.impactParticle, hit.point, Quaternion.LookRotation(hit.normal));
         GameObject impact = Instantiate(bulletHole, hit.point, Quaternion.LookRotation(hit.normal));
-        Vector3 forward = impact.transform.forward;
-        impact.transform.Translate(forward * 0.1f, Space.World);
+        impact.transform.SetParent(hit.transform);
+        impact.transform.position += impact.transform.forward * 0.01f;
+        float rot = Random.Range(0, 361);
+        impact.transform.Rotate(0, 0, rot, Space.Self);
         Destroy(impact, bulletHoleDuration);
     }
 }
