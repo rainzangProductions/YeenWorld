@@ -11,30 +11,38 @@ public class ThirdPersonPlayer : MonoBehaviour
     //public Transform orientation;
     public float groundDrag;
     public float turnSpeed = 10f;
-    public bool allowStrafe;
+    //public bool allowStrafe;
 
     [Header("Jumping")]
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    public float moonWalkerMultiplier;
+    public bool hasMoonWalker = true;
+    bool justLanded;
 
     [Header("Crouching")]
-    public bool isCrouching;
+    bool isCrouching;
     public Transform bodyGFX;
     float originalHeight;
 
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    public bool grounded;
+    bool grounded;
+
+    [Header("SFX")]
+    public AudioClip landingSound;
+    public AudioClip lunarJumpSound;
 
     float horInput;
     float vertInput;
 
-    public Vector3 moveDirection;
+    Vector3 moveDirection;
     Rigidbody rb;
     CapsuleCollider cc;
+    SoundMaster mixer;
 
     void Start()
     {
@@ -44,11 +52,16 @@ public class ThirdPersonPlayer : MonoBehaviour
         readyToJump = true;
         crouchSpeed = moveSpeed / 2.5f;
         originalHeight = GetComponent<CapsuleCollider>().height;
+        mixer = FindObjectOfType<SoundMaster>();
     }
 
     void Update()
     {
         if (Time.timeScale == 0f) return;
+        if (grounded && readyToJump && !justLanded) {
+            mixer.PlaySFXAtPosition(landingSound, transform.position);
+            justLanded = true;
+        }
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
         SpeedControl();
@@ -82,29 +95,30 @@ public class ThirdPersonPlayer : MonoBehaviour
             transform.Rotate(0, yaw, 0);
         }
     }
-    void MyInput()
-    {
+    void MyInput() {
         horInput = Input.GetAxisRaw("Horizontal");
         vertInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButton("Jump") && readyToJump && grounded && !isCrouching)
-        {
+        if (Input.GetButton("Jump") && readyToJump && grounded && !isCrouching) {
             readyToJump = false;
             Jump();
-            //Debug.Log("jumped");
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        if (Input.GetButton("Moon Walker") && readyToJump && grounded && !isCrouching) {
+            readyToJump = false;
+            LunarJump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
         if (Input.GetButtonDown("Crouch"))
         {
             isCrouching = !isCrouching;
             Crouch();
-            //Debug.Log("crouch button pressed");
         }
     }
-    void MovePlayerRotation()
+    /*void MovePlayerRotation()
     {
         float speed = isCrouching ? crouchSpeed : moveSpeed;
-        float horizontalScale = turnSpeed/moveSpeed; // adjust strafing speed here
+        //float horizontalScale = turnSpeed/moveSpeed; // adjust strafing speed here
 
         if (!allowStrafe)
         {
@@ -115,12 +129,13 @@ public class ThirdPersonPlayer : MonoBehaviour
             moveDirection = transform.forward * vertInput +
                             transform.right * horInput * horizontalScale;
         }
+        moveDirection = transform.forward * vertInput;
 
         if (grounded)
             rb.AddForce(moveDirection * speed * 10f, ForceMode.Force);
         else
             rb.AddForce(moveDirection * speed * 10f * airMultiplier, ForceMode.Force);
-    }
+    }*/
 
     void MovePlayerNoRotation() {
         float speed = isCrouching ? crouchSpeed : moveSpeed;
@@ -161,15 +176,20 @@ public class ThirdPersonPlayer : MonoBehaviour
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
-    void Jump()
-    {
+    void Jump() {
         //reset y velocity
+        justLanded = false;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
+    void LunarJump() {
+        justLanded = false;
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(transform.up * jumpForce * moonWalkerMultiplier, ForceMode.Impulse);
+        mixer.PlaySFXAtPosition(lunarJumpSound, transform.position);
+    }
 
-    void ResetJump()
+    public void ResetJump()
     {
         readyToJump = true;
     }
