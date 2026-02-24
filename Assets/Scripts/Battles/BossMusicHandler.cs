@@ -48,11 +48,12 @@ public class BossMusicHandler : MonoBehaviour
     void StartMusic(int battleID)
     {
         // Set the initial playback position to the loop start position
-        audioSource.clip = bossMusic[lastSpawnerInfo.battleID - 1];
-        if(customLoopStart) audioSource.time = loopStart;
-        if (!customLoopStart)  audioSource.time = 0;
+        //audioSource.clip = bossMusic[lastSpawnerInfo.battleID - 1];
+        //if(customLoopStart) audioSource.time = loopStart;
+        //if (!customLoopStart)  audioSource.time = 0;
         //audioSource.volume = volume;
-        audioSource.Play();
+        //audioSource.Play();
+
     }
 
     void Update()

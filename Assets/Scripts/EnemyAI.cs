@@ -66,8 +66,9 @@ public class EnemyAI : MonoBehaviour
 
         if (!playerInSightRange && !playerInAttackRange) Patrol();
         if (playerInSightRange && !playerInAttackRange) Chase();
-        //if (playerInSightRange && playerInAttackRange) Attack();
-        if (playerInSightRange && playerInAttackRange)
+        if (playerInSightRange && playerInAttackRange) Attack();
+        
+        /*if (playerInSightRange && playerInAttackRange)
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward,
@@ -82,7 +83,7 @@ public class EnemyAI : MonoBehaviour
             {
                 Chase();
             }
-        }
+        }*/
     }
 
     void Patrol()

@@ -18,8 +18,7 @@ public class SoundMaster : MonoBehaviour {
     public Slider musicSlider;
     public Slider sfxSlider;
 
-    // Music Controls
-    // -------------------------
+    public AudioClip bgMusic;
     void Awake() {
         LoadVolume("master", masterSlider);
         LoadVolume("music", musicSlider);
@@ -35,11 +34,13 @@ public class SoundMaster : MonoBehaviour {
     }
     void Start() {
         PlayMusic(musicSource.clip);
+        bgMusic = musicSource.clip;
     }
     public void PlayMusic(AudioClip clip, bool loop = true) {
         musicSource.clip = clip;
         musicSource.loop = loop;
         musicSource.Play();
+        Debug.LogError("NOW PLAYING:" + clip.ToString());
     }
 
     public void StopMusic() {

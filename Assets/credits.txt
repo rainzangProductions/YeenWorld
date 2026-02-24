@@ -28,6 +28,8 @@ https://www.youtube.com/watch?v=UvWRz58K8ek&list=PLoqOgJJaN57YiiY-JrdSvBVCprMPed
 Weapon Switch and Ice Crackle sound (distortion + RIAA)
 https://www.youtube.com/watch?v=Mfxv6EXbJIM&pp=ygUWZ21vZCBpdGVtIHBpY2t1cCBzb3VuZA%3D%3D (0:19)
 
+Ice Crackle 2: Ice Crackle + HBFS 
+
 Record Player (VIS Games)
 https://assetstore.unity.com/packages/3d/props/interior/record-player-4249
 
@@ -55,3 +57,9 @@ https://assetstore.unity.com/packages/tools/physics/prometeo-car-controller-2094
 
 Laserite/Jelk Cannon Splotch Image:
 https://static.vecteezy.com/system/resources/thumbnails/029/341/677/small/orange-ink-splashes-png.png
+
+Air Blast Sound:https://youtu.be/Ad8hYdBhvjQ
+Audacity: no drums backup (Shift F) -- double the layer an octave lower -- treble cut on both, THEN bass boost for one of them
+Fade out near the start of editing and then a 2nd fade out for both just to make them cut out faster
+
+Water splash: https://youtu.be/AhNtpS-_DTo (20% sped up)

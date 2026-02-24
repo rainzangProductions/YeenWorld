@@ -56,7 +56,7 @@ public class LaseriteCannon : MonoBehaviour
             }
 
             // First thing AFTER the player
-            Debug.Log("You shot at " + hit.transform.name);
+            //Debug.Log("You shot at " + hit.transform.name);
 
             EnemyAI target = hit.transform.GetComponent<EnemyAI>();
             if (target != null)
