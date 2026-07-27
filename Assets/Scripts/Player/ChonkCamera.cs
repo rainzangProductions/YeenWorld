@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class ChonkCamera : MonoBehaviour
 {
@@ -13,9 +16,12 @@ public class ChonkCamera : MonoBehaviour
     private Vector2 _input;
 
     [SerializeField] private MouseSensitivity mouseSensitivity;
+    float originalYSens;
     [SerializeField] private CameraAngle cameraAngle;
 
     private CameraRotation _cameraRotation;
+
+    public Slider sensitivitySlider;
 
     InventoryUI inventory;
 
@@ -24,18 +30,35 @@ public class ChonkCamera : MonoBehaviour
 
     [SerializeField] private LayerMask cameraCollisionMask;
     [SerializeField] private float cameraRadius = 0.3f;
-    void Awake() => _distanceToPlayer = Vector3.Distance(transform.position, target.position);
+    //void Awake() => _distanceToPlayer = Vector3.Distance(transform.position, target.position);
+    void Awake() {
+        _distanceToPlayer = Vector3.Distance(transform.position, target.position);
+        float linear = PlayerPrefs.GetFloat("cameraSensitivity");
+        sensitivitySlider.value = linear;
+    }
+    public void SetSensitivity() {
+        float linear = sensitivitySlider.value;
+        PlayerPrefs.SetFloat("cameraSensitivity", linear);
+        PlayerPrefs.Save();
+    }
 
-    void Start()
-    {
+    void Start() {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         inventory = FindObjectOfType<InventoryUI>();
+        originalYSens = mouseSensitivity.vertical;
     }
 
     public void Look(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
+        mouseSensitivity.vertical = originalYSens;
+
+        //controller settings ONLY
+        if (context.control.device is Gamepad) {
+            _input *= sensitivitySlider.value;
+            mouseSensitivity.vertical = mouseSensitivity.horizontal * 1.1f;
+        }
     }
 
     void Update()

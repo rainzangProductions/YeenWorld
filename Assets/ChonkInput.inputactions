@@ -11,7 +11,8 @@
                     "id": "8b9ddf4d-31e5-4fbe-9e28-bba8ec04cb3f",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -19,6 +20,17 @@
                     "name": "",
                     "id": "69acbdd5-0b2a-4fc9-af81-0a2b6a5ad28a",
                     "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de9f1c2e-448d-41d2-a163-36f29afefa02",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
