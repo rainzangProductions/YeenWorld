@@ -21,6 +21,7 @@ public class ChonkCamera : MonoBehaviour
 
     private CameraRotation _cameraRotation;
 
+    //this slider is for the MAIN MENU SETTINGS!!
     public Slider sensitivitySlider;
 
     InventoryUI inventory;

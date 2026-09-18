@@ -12,7 +12,7 @@ public class ThirdPersonPlayer : MonoBehaviour {
     public float groundDrag = 5f;
     public float turnSpeed = 5f;
     //public bool allowStrafe;
-    MovementState state;
+    //MovementState state;
     public bool hasMomentum;
 
     [Header("Jumping")]
@@ -52,10 +52,10 @@ public class ThirdPersonPlayer : MonoBehaviour {
 
     bool inWater;
 
-    public enum MovementState {
+    /*ublic enum MovementState {
         moving,
         air
-    }
+    }*/
 
     Vector3 moveDirection;
     Rigidbody rb;
@@ -92,7 +92,7 @@ public class ThirdPersonPlayer : MonoBehaviour {
         
         MyInput();
         SpeedControl();
-        StateHandler();
+        //StateHandler();
 
         if (grounded) {
             rb.drag = isDashing ? 0f : groundDrag;
@@ -243,13 +243,13 @@ public class ThirdPersonPlayer : MonoBehaviour {
         readyToAirBlast = true;
     }
 
-    void StateHandler() {
+    /*void StateHandler() {
         if(grounded) {
             state = MovementState.moving;
         } else {
             state = MovementState.air;
         }
-    }
+    }*/
 
     void Crouch() {
         if (isCrouching)
