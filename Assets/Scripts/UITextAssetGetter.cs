@@ -15,7 +15,7 @@ public class UITextAssetGetter : MonoBehaviour
     void Start()
     {
         gameLanguage = PlayerPrefs.GetString("languageCode");
-        if (gameLanguage == null)
+        if (gameLanguage == "")
         {
             //default to English when interacting with NPCs for the first time
             gameLanguage = "EN";
@@ -23,7 +23,7 @@ public class UITextAssetGetter : MonoBehaviour
         }
         filePath = "UI/" + gameObject.name;
         File = Resources.Load<TextAsset>(filePath);
-        //Debug.Log(filePath);
+        // Debug.Log(filePath);
 
         LoadLocalizationData();
         //Debug.Log($"Translation in {gameLanguage}: {translatedWord}");
