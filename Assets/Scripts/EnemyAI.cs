@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +6,22 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem.HID;
 
 //Dave's Tutorial: https://youtu.be/UjkSFoLxesw
-public class EnemyAI : MonoBehaviour
+public abstract class EnemyAI : MonoBehaviour
 {
     [Header("Health")]
     public int health;
     public AudioClip[] deathSounds;
 
-    public enum AttackType { Ranged, Splash, Melee }
-    public AttackType attackType;
+    //public enum AttackType { Ranged, Splash, Melee }
+    //public AttackType attackType;
     public int damage;
 
     [Header("Hitscan Attack Info")]
     public int scanDistance;
     [Header("Projectile Attack Info")]
     public GameObject projectile;
-    public int projectileSpeed = 12;
-    public bool useGravity = true;
+    public int projectileSpeed;
+    public bool useGravity;
     [Header("Melee Attack Info")]
     public int meleeRange;
 
@@ -32,25 +31,25 @@ public class EnemyAI : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer;
 
     public Vector3 walkPoint;
-    bool walkPointSet;
+    public bool walkPointSet;
     public float walkPointRange;
 
     [Header("Timing Info")]
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    public bool alreadyAttacked;
 
     public float sightRange, attackRange;
-    bool playerInSightRange, playerInAttackRange;
+    public bool playerInSightRange, playerInAttackRange;
 
-    SoundMaster mixer;
-    void Awake()
+    public SoundMaster mixer;
+    public virtual void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         mixer = FindAnyObjectByType<SoundMaster>();
     }
 
-    void Update()
+    public virtual void Update()
     {
         /*if (doesFollowPlayer)
         {
@@ -86,7 +85,7 @@ public class EnemyAI : MonoBehaviour
         }*/
     }
 
-    void Patrol()
+    public virtual void Patrol()
     {
         if (!walkPointSet) SearchWalkPoint();
         if(walkPointSet)
@@ -98,7 +97,7 @@ public class EnemyAI : MonoBehaviour
         if (distanceToWalkPoint.magnitude < 1f) walkPointSet = false;
     }
 
-    void SearchWalkPoint()
+    public virtual void SearchWalkPoint()
     {
         float randomX = Random.Range(-walkPointRange, walkPointRange);
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
@@ -110,16 +109,16 @@ public class EnemyAI : MonoBehaviour
             walkPointSet = true;
         }
     }
-    void Chase()
+    public virtual void Chase()
     {
         agent.SetDestination(player.position);
     }
-    void Attack()
+    public virtual void Attack()
     {
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
-        if(!alreadyAttacked) { 
+        /*if(!alreadyAttacked) { 
             if(attackType == AttackType.Ranged)
             {
 
@@ -144,15 +143,15 @@ public class EnemyAI : MonoBehaviour
             }
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
+        }*/
     }
 
-    void ResetAttack()
+    public virtual void ResetAttack()
     {
         alreadyAttacked = false;
     }
 
-    public void TakeDamage(int amount)
+    public virtual void TakeDamage(int amount)
     {
         health -= amount;
         if(health <= 0 )
@@ -164,7 +163,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void Die()
+    public virtual void Die()
     {
         //HordeBattle bb = GameObject.FindObjectOfType<HordeBattle>();
         //if(bb.inBattle) { bb.mobList.RemoveAt(0); }
