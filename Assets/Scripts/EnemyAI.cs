@@ -10,7 +10,7 @@ public abstract class EnemyAI : MonoBehaviour
 {
     [Header("Health")]
     public int health;
-    public AudioClip[] deathSounds;
+    public AudioClip deathSound;
 
     //public enum AttackType { Ranged, Splash, Melee }
     //public AttackType attackType;
@@ -146,7 +146,7 @@ public abstract class EnemyAI : MonoBehaviour
         }*/
     }
 
-    public virtual void ResetAttack()
+    public virtual void ResetAttack() 
     {
         alreadyAttacked = false;
     }
@@ -156,8 +156,8 @@ public abstract class EnemyAI : MonoBehaviour
         health -= amount;
         if(health <= 0 )
         {
-            int death = Random.Range(0, deathSounds.Length);
-            mixer.PlaySFXAtPosition(deathSounds[death], transform.position);
+            //int death = Random.Range(0, deathSounds.Length);
+            mixer.PlaySFXAtPosition(deathSound, transform.position);
             //Invoke(nameof(Die), 0.25f);
             Die();
         }
