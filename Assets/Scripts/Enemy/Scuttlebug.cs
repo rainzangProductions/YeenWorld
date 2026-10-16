@@ -8,45 +8,54 @@ using UnityEngine.InputSystem.HID;
 //Dave's Tutorial: https://youtu.be/UjkSFoLxesw
 public class Scuttlebug : EnemyAI
 {
-
+    private string defaultColorClass = "red";
     public enum battleClass {Red, Blue};
     public battleClass currentBattleClass;
-    Transform LOD0, LOD1, LOD2, LOD3;
+    Transform LOD0, LOD1, LOD2, LOD3; //SPECIFIC TO THE CURRENT MODEL OF THE SCUTTLEBUG
     void Start()
     {
-        switch (currentBattleClass)
+        //is this switch necessary? The original idea was to change certain variables, like speed or attack,
+        //therefore I really don't need this switch case or the ChangeColor() void in the distant future
+        /*switch (currentBattleClass)
         {
             case battleClass.Red:
                 break;
             case battleClass.Blue:
                 ChangeColor();
                 break;
-        }
+        }*/
+        ChangeColorAndStats();
     }
     //use this for more classes later on? but then we have to
     //configure where the material gameobject is for different enemies
     //should they also use battle classes/different tiers of difficulty
-    void ChangeColor()
+    void ChangeColorAndStats()
     {
+        //the first half will be VISUAL ONLY
+        string colorCode = currentBattleClass.ToString().ToLower();
+
         LOD0 = transform.Find("Mesh_LOD0");
         LOD1 = transform.Find("Mesh_LOD1");
         LOD2 = transform.Find("Mesh_LOD2");
         LOD3 = transform.Find("Mesh_LOD3");
-        if(LOD0 != null)
+        if(ColorUtility.TryParseHtmlString(colorCode, out Color color) && colorCode != defaultColorClass)
         {
-            LOD0.GetComponent<Renderer>().material.color = Color.blue;
+            if(LOD0 != null)
+        {
+            LOD0.GetComponent<Renderer>().material.color = color;
         }
         if(LOD1 != null)
         {
-            LOD1.GetComponent<Renderer>().material.color = Color.blue;
+            LOD1.GetComponent<Renderer>().material.color = color;
         }
         if(LOD2 != null)
         {
-            LOD2.GetComponent<Renderer>().material.color = Color.blue;
+            LOD2.GetComponent<Renderer>().material.color = color;
         }
         if(LOD3 != null)
         {
-            LOD3.GetComponent<Renderer>().material.color = Color.blue;
+            LOD3.GetComponent<Renderer>().material.color = color;
+        }
         }
         base.timeBetweenAttacks *= .70f;
     }
