@@ -30,6 +30,13 @@ public class GrenadeLauncher : MonoBehaviour
 
     void Shoot()
     {
+        //Look in camera direction
+        Transform TPSPlayer = GameObject.FindWithTag("Player").transform;
+        Vector3 direction = Camera.main.transform.forward;
+        direction.y = 0f;
+        TPSPlayer.rotation = Quaternion.LookRotation(direction);
+        TPSPlayer.GetComponent<ThirdPersonPlayer>().OnShoot();
+
         //GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPoint.position, spawnPoint.rotation);
         GameObject grenadeInstance = Instantiate(grenadePrefab, spawnPoint.position, spawnPoint.rotation);
         grenadeInstance.tag = "Player Projectile";

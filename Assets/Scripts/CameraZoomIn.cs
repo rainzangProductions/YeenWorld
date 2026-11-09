@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraZoomIn : MonoBehaviour
 {
     float defaultPOV;
-    float scopedPOV = 25;
+    public float scopedPOV = 30;
     Camera mainCamera;
     bool justUnscoped = false;
 
@@ -27,22 +27,31 @@ public class CameraZoomIn : MonoBehaviour
     }
     void Update()
     {
+        //targetIn = scopedPOV;
         if(Input.GetButton("Scope In"))
         {
             lerpedValue = Mathf.MoveTowards(lerpedValue, targetIn, (totalScale / scopeDuration) * Time.deltaTime);
             //Debug.Log(lerpedValue.ToString());
             mainCamera.fieldOfView = lerpedValue;
+
+            //Look in camera direction
+            Vector3 direction = mainCamera.transform.forward;
+            direction.y = 0f;
+            transform.rotation = Quaternion.LookRotation(direction);
         }
+
         if (Input.GetButtonUp("Scope In"))
         {
             justUnscoped = true;
         }
+
         if (!Input.GetButton("Scope In") && justUnscoped)
         {
             lerpedValue = Mathf.MoveTowards(lerpedValue, targetOut, (totalScale / scopeDuration) * Time.deltaTime);
             //Debug.Log(lerpedValue.ToString());
             mainCamera.fieldOfView = lerpedValue;
         }
+
         if(mainCamera.fieldOfView >= defaultPOV) { justUnscoped = false; mainCamera.fieldOfView = defaultPOV; }
     }
 

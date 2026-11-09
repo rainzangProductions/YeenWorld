@@ -36,6 +36,13 @@ public class LaseriteCannon : MonoBehaviour
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit[] hits = Physics.RaycastAll(ray, thisWeapon.range);
 
+        //Look in camera direction
+        Transform TPSPlayer = GameObject.FindWithTag("Player").transform;
+        Vector3 direction = Camera.main.transform.forward;
+        direction.y = 0f;
+        TPSPlayer.rotation = Quaternion.LookRotation(direction);
+        TPSPlayer.GetComponent<ThirdPersonPlayer>().OnShoot();
+
         if (hits.Length == 0)
             return;
 
@@ -72,7 +79,6 @@ public class LaseriteCannon : MonoBehaviour
             break;
         }
     }
-
 
 
     void BulletHoleImpact(RaycastHit hit) {

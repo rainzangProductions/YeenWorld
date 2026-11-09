@@ -20,6 +20,7 @@ public class ThirdPersonPlayer : MonoBehaviour {
     public float jumpCooldown;
     bool readyToJump;
     bool justLanded;
+    bool justShot;
 
     //CHANGE hasMoonWalker to FALSE before the game releases!
     [Header("Moon Walker")]
@@ -68,6 +69,7 @@ public class ThirdPersonPlayer : MonoBehaviour {
         rb.freezeRotation = true;
         readyToJump = true;
         readyToAirBlast = true;
+        justShot = false;
         crouchSpeed = moveSpeed / 2.5f;
         originalHeight = GetComponent<CapsuleCollider>().height;
         mixer = FindObjectOfType<SoundMaster>();
@@ -106,7 +108,8 @@ public class ThirdPersonPlayer : MonoBehaviour {
         MovePlayer();
         //SpeedControl();
     }
-   void Turn() {
+
+   /*void Turn() {
         //turn more slowly when airborne
         if(!readyToJump || !grounded)
         {
@@ -117,7 +120,8 @@ public class ThirdPersonPlayer : MonoBehaviour {
             float yaw = turnSpeed * Input.GetAxisRaw("Horizontal");
             transform.Rotate(0, yaw, 0);
         }
-    }
+    }*/
+
     void MyInput() {
         horInput = Input.GetAxisRaw("Horizontal");
         vertInput = Input.GetAxisRaw("Vertical");
@@ -172,11 +176,25 @@ public class ThirdPersonPlayer : MonoBehaviour {
         else
             rb.AddForce(moveDirection.normalized * speed * 10f * airMultiplier, ForceMode.Force);
 
-        // rotate player to face movement direction
-        if (moveDirection.magnitude > 0.1f) {
+
+        // remove the if(!justShot) line ONLY if you need to go back and also remove the startcoroutine
+        if (!justShot && moveDirection.magnitude > 0.1f) {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,turnSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,turnSpeed * Time.fixedDeltaTime);
         }
+    }
+
+    //freeze after shooting bc idk how else to make my game look good and make it look like the character isn't just instantly snapping directions
+    //like in 2D pokemon
+    //feel free to rename the function in the future when there's more shit that happens to the player after shooting
+    public void OnShoot() {
+        StopCoroutine(nameof(StopTurningAfterShooting));
+        justShot = true;
+        StartCoroutine(StopTurningAfterShooting());
+    }
+    IEnumerator StopTurningAfterShooting() {
+        yield return new WaitForSeconds(0.5f);
+        justShot = false;
     }
 
     void SpeedControl()
@@ -223,6 +241,7 @@ public class ThirdPersonPlayer : MonoBehaviour {
         mixer.PlaySFXAtPosition(lunarJumpSound, transform.position);
     }
 
+    //rework so that the blast cuts off the velocity midair so it doesn't build up bc i don't want bhopping
     void AirBlast() {
         isDashing = true;
         mixer.PlaySFXAtPosition(airBlastSound, transform.position);
@@ -263,6 +282,8 @@ public class ThirdPersonPlayer : MonoBehaviour {
             bodyGFX.localScale = Vector3.one;
         }
     }
+
+
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.layer == LayerMask.NameToLayer("Water")) {
             inWater = true;
