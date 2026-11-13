@@ -65,6 +65,7 @@ public class LaseriteCannon : MonoBehaviour
             // First thing AFTER the player
             //Debug.Log("You shot at " + hit.transform.name);
 
+            //ENEMY LOGIC
             EnemyAI target = hit.transform.GetComponent<EnemyAI>();
             if (target != null)
                 target.TakeDamage(thisWeapon.damage);
@@ -74,6 +75,13 @@ public class LaseriteCannon : MonoBehaviour
 
             if (thisWeapon.useSound != null)
                 mixer.PlaySFXAtPosition(thisWeapon.useSound, transform.position);
+
+            //DESTRUCTABLE LOGIC
+            DestructableObj targetObj = hit.transform.GetComponent<DestructableObj>();
+            if(targetObj != null)
+                targetObj.TakeDamage();
+
+            //HELLOOOO lmao hi future self what's up?
 
             BulletHoleImpact(hit);
             break;
